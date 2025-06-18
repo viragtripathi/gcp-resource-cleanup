@@ -108,3 +108,70 @@ Ensure your Cloud Function's service account has:
 * ✅ Cloud SQL Backups
 
 More can be added by extending `main.py`.
+
+---
+
+## 🔐 Prerequisites: GCloud CLI & Auth Setup
+
+Before deploying this automation, ensure the following tools and access are set up:
+
+### ✅ 1. Install GCloud CLI
+
+Follow the official instructions here:
+👉 [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install)
+
+Then verify installation:
+
+```bash
+gcloud version
+```
+
+### ✅ 2. Authenticate to GCP
+
+If not already authenticated:
+
+```bash
+gcloud auth login
+```
+
+Then set your default project:
+
+```bash
+gcloud config set project your-gcp-project-id
+```
+
+### ✅ 3. Enable Required APIs
+
+This project requires these GCP APIs:
+
+```bash
+gcloud services enable \
+  cloudfunctions.googleapis.com \
+  pubsub.googleapis.com \
+  cloudscheduler.googleapis.com \
+  compute.googleapis.com \
+  storage.googleapis.com \
+  sqladmin.googleapis.com
+```
+
+### ✅ 4. Permissions Required
+
+Ensure your user or Cloud Function **service account** has the following IAM roles:
+
+| Role                             | Purpose                    |
+|----------------------------------|----------------------------|
+| `roles/compute.storageAdmin`     | Manage GCE snapshots       |
+| `roles/storage.admin`            | Delete GCS objects         |
+| `roles/cloudsql.admin`           | Cleanup Cloud SQL backups  |
+| `roles/pubsub.publisher`         | Publish Scheduler messages |
+| `roles/cloudfunctions.developer` | Deploy functions           |
+
+You can grant these roles via IAM in the Google Cloud Console or using CLI:
+
+```bash
+gcloud projects add-iam-policy-binding your-gcp-project-id \
+  --member="user:your.email@example.com" \
+  --role="roles/compute.storageAdmin"
+```
+
+(Repeat for other roles as needed.)

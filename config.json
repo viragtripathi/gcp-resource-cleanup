@@ -1,0 +1,10 @@
+{
+  "project_id": "your-gcp-project-id",
+  "retention_days": 30,
+  "resources": {
+    "gce_snapshots": true,
+    "gcs_buckets": true,
+    "cloudsql_backups": true
+  }
+}
+
